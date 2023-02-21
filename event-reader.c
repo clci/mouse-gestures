@@ -36,6 +36,7 @@ EndSection
 #define SWIPE_EMIT_DISTANCE 30
 #define MOUSE_EMIT_DISTANCE 120
 #define MOUSE_GESTURE_BTN_CODE 275
+#define MOUSE_CUSTOM_BTN_1 276
 
 
 static int open_restricted(const char *path, int flags, void *user_data) {
@@ -69,7 +70,7 @@ int main(void) {
 
 	struct libinput_event_gesture *gesture_ev;
 	struct libinput_event_pointer *pointer_ev;
-	uint32_t btn, btn_pressed;
+	uint32_t btn_pressed;
 	bool mouse_gesture = false;
 	double mg_x, mg_y;
 
@@ -135,18 +136,34 @@ int main(void) {
 				case LIBINPUT_EVENT_POINTER_BUTTON:
 
 					pointer_ev = libinput_event_get_pointer_event(ev);
-					btn = libinput_event_pointer_get_button(pointer_ev);
+					uint32_t btn;
+					switch (btn = libinput_event_pointer_get_button(pointer_ev)) {
 
-					if (btn == MOUSE_GESTURE_BTN_CODE) {
-						btn_pressed = libinput_event_pointer_get_button_state(pointer_ev);
-						if (btn_pressed) {
-							mouse_gesture = true;
-							mg_x = mg_y = 0.0;
-							type = "MOUSE_GESTURE_BEGIN";
-						} else {
-							mouse_gesture = false;
-							type = "MOUSE_GESTURE_END";
-						}
+						case MOUSE_GESTURE_BTN_CODE:
+							btn_pressed = libinput_event_pointer_get_button_state(pointer_ev);
+							if (btn_pressed) {
+								mouse_gesture = true;
+								mg_x = mg_y = 0.0;
+								type = "MOUSE_GESTURE_BEGIN";
+							} else {
+								mouse_gesture = false;
+								type = "MOUSE_GESTURE_END";
+							}
+						break;
+
+						case MOUSE_CUSTOM_BTN_1:
+							btn_pressed = libinput_event_pointer_get_button_state(pointer_ev);
+							if (btn_pressed) {
+								printf("event: MOUSE_CUSTOM_BTN_1_PRESSED\n");
+							} else {
+								printf("event: MOUSE_CUSTOM_BTN_1_RELEASED\n");
+							}
+							fflush(stdout);
+						break;
+
+						default:
+						break;
+
 					}
 
 				break;

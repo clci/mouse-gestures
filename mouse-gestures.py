@@ -17,7 +17,9 @@ EVENT_TO_KEY_MAP = {
     b'MOUSE_GESTURE_UP_INCOMPLETE': 'keydown super keydown Down keyup Down keyup super',
     b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'keydown super keydown Left keyup Left keyup super',
     b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'keydown super keydown Up keyup Up keyup super',
-    b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super'
+    b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super',
+    b'MOUSE_CUSTOM_BTN_1_PRESSED': 'keydown super keydown s keyup s keyup super',
+    b'MOUSE_CUSTOM_BTN_1_RELEASED': None
 }
 
 
@@ -75,7 +77,9 @@ if __name__ == '__main__':
         event = event_reader.wait_event()
 
         if event in EVENT_TO_KEY_MAP:
-            xdotool.press_key(EVENT_TO_KEY_MAP[event])
+            command = EVENT_TO_KEY_MAP[event]
+            if command is not None:
+                xdotool.press_key(EVENT_TO_KEY_MAP[event])
         else:
             print('unhandled event', event)
 
