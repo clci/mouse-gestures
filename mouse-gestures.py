@@ -2,14 +2,22 @@ import sys, os, time, subprocess
 
 
 EVENT_TO_KEY_MAP = {
-    b'SWIPE_GESTURE_UP_INCOMPLETE': 'super+Down',
-    b'SWIPE_GESTURE_RIGHT_INCOMPLETE': 'super+Left',
-    b'SWIPE_GESTURE_DOWN_INCOMPLETE': 'super+Up',
-    b'SWIPE_GESTURE_LEFT_INCOMPLETE': 'super+Right',
-    b'MOUSE_GESTURE_UP_INCOMPLETE': 'super+Down',
-    b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'super+Left',
-    b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'super+Up',
-    b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'super+Right'
+    # b'SWIPE_GESTURE_UP_INCOMPLETE': 'super+Down',
+    # b'SWIPE_GESTURE_RIGHT_INCOMPLETE': 'super+Left',
+    # b'SWIPE_GESTURE_DOWN_INCOMPLETE': 'super+Up',
+    # b'SWIPE_GESTURE_LEFT_INCOMPLETE': 'super+Right',
+    # b'MOUSE_GESTURE_UP_INCOMPLETE': 'super+Down',
+    # b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'super+Left',
+    # b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'super+Up',
+    # b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'super+Right'
+    b'SWIPE_GESTURE_UP_INCOMPLETE': 'keydown super keydown Down keyup Down keyup super',
+    b'SWIPE_GESTURE_RIGHT_INCOMPLETE': 'keydown super keydown Left keyup Left keyup super',
+    b'SWIPE_GESTURE_DOWN_INCOMPLETE': 'keydown super keydown Up keyup Up keyup super',
+    b'SWIPE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super',
+    b'MOUSE_GESTURE_UP_INCOMPLETE': 'keydown super keydown Down keyup Down keyup super',
+    b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'keydown super keydown Left keyup Left keyup super',
+    b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'keydown super keydown Up keyup Up keyup super',
+    b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super'
 }
 
 
@@ -21,6 +29,7 @@ class XDoTool:
 
     def press_key(self, key_name):
         self.subp.stdin.write(f'key {key_name}\n'.encode('ascii'))
+        # self.subp.stdin.write(f'key --delay 20 {key_name}\n'.encode('ascii'))
 
 
     def move_mouse_relative(self, rel_x, rel_y):
