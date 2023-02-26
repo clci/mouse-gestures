@@ -10,15 +10,15 @@ EVENT_TO_KEY_MAP = {
     # b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'super+Left',
     # b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'super+Up',
     # b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'super+Right'
-    b'SWIPE_GESTURE_UP_INCOMPLETE': 'keydown super keydown Down keyup Down keyup super',
-    b'SWIPE_GESTURE_RIGHT_INCOMPLETE': 'keydown super keydown Left keyup Left keyup super',
-    b'SWIPE_GESTURE_DOWN_INCOMPLETE': 'keydown super keydown Up keyup Up keyup super',
-    b'SWIPE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super',
-    b'MOUSE_GESTURE_UP_INCOMPLETE': 'keydown super keydown Down keyup Down keyup super',
-    b'MOUSE_GESTURE_RIGHT_INCOMPLETE': 'keydown super keydown Left keyup Left keyup super',
-    b'MOUSE_GESTURE_DOWN_INCOMPLETE': 'keydown super keydown Up keyup Up keyup super',
-    b'MOUSE_GESTURE_LEFT_INCOMPLETE': 'keydown super keydown Right keyup Right keyup super',
-    b'MOUSE_CUSTOM_BTN_1_PRESSED': 'keydown super keydown s keyup s keyup super',
+    b'SWIPE_GESTURE_UP_INCOMPLETE': ['keydown super keydown Down', 0.1, 'keyup Down keyup super'],
+    b'SWIPE_GESTURE_RIGHT_INCOMPLETE': ['keydown super keydown Left', 0.1, 'keyup Left keyup super'],
+    b'SWIPE_GESTURE_DOWN_INCOMPLETE': ['keydown super keydown Up', 0.1, 'keyup Up keyup super'],
+    b'SWIPE_GESTURE_LEFT_INCOMPLETE': ['keydown super keydown Right', 0.1, 'keyup Right keyup super'],
+    b'MOUSE_GESTURE_UP_INCOMPLETE': ['keydown super keydown Down', 0.1, 'keyup Down keyup super'],
+    b'MOUSE_GESTURE_RIGHT_INCOMPLETE': ['keydown super keydown Left', 0.1, 'keyup Left keyup super'],
+    b'MOUSE_GESTURE_DOWN_INCOMPLETE': ['keydown super keydown Up', 0.1, 'keyup Up keyup super'],
+    b'MOUSE_GESTURE_LEFT_INCOMPLETE': ['keydown super keydown Right', 0.1, 'keyup Right keyup super'],
+    b'MOUSE_CUSTOM_BTN_1_PRESSED': ['keydown super keydown s', 0.1, 'keyup s keyup super'],
     b'MOUSE_CUSTOM_BTN_1_RELEASED': None
 }
 
@@ -79,7 +79,11 @@ if __name__ == '__main__':
         if event in EVENT_TO_KEY_MAP:
             command = EVENT_TO_KEY_MAP[event]
             if command is not None:
-                xdotool.press_key(EVENT_TO_KEY_MAP[event])
+                for part in command:
+                    if isinstance(part, str):
+                        xdotool.press_key(part)
+                    elif isinstance(part, (int, float)):
+                        time.sleep(part)
         else:
             print('unhandled event', event)
 
